@@ -17,7 +17,7 @@ from handlers.api import app, router as api_router
 import errors
 from models.user import User
 from models.setting import Setting
-D:\LinDev\DiscordBot\test\.venv\Scripts;C:\Users\lotey\AppData\Local\Programs\Python\Python312;C:\Users\lotey\AppData\Local\Programs\Python\Python312\Scripts;C:\Users\lotey\AppData\Local\Programs\Microsoft VS Code;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;D:\LinDev\ngrok;C:\Users\lotey\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\lotey\AppData\Local\Programs\Python\Python312\;C:\Users\lotey\AppData\Local\Programs\Python\Launcher\;C:\Users\lotey\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\lotey\.local\bin;;C:\Users\
+
 #三方支付
 stripe.api_key = config.STRIPE_API_KEY
 stripe.api_version = config.STRIPE_API_VERSION

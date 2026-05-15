@@ -10,8 +10,7 @@ from services.user_service import UserService
 from utils.logger_config import logger
 from services.order_service import OrderService
 from components.order_list_card import OrderListCard
-
-DISCORD_SERVER_INVITE = 'https://discord.gg/n3Ee6j8ru'
+from config import STRIPE_SUCCESS_URL, STRIPE_CANCEL_URL
 
 class UserHandler:
     @staticmethod
@@ -49,10 +48,11 @@ class UserHandler:
                     'quantity': 1,
                 }],
                 mode = 'payment',
-                success_url = f'{DISCORD_SERVER_INVITE}?session_id={{CHECKOUT_SESSION_ID}}', 
-                cancel_url = DISCORD_SERVER_INVITE,
+                success_url = f'{STRIPE_SUCCESS_URL}?session_id={{CHECKOUT_SESSION_ID}}', 
+                cancel_url = STRIPE_CANCEL_URL,
                 metadata = {
                     'order_id': str(order.id),
+                    'order_no': str(order.order_no),
                     'product_id': str(product.id),
                     'user_id': str(user.id),
                     'discord_id': str(user.discord_id),

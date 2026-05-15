@@ -1,4 +1,5 @@
 import json
+import discord
 from tortoise.transactions import in_transaction
 from models.order import Order
 from models.product import Product
@@ -7,7 +8,7 @@ from components.key_card import create_key_display
 from loguru import logger
 from typing import List
 from utils.notification import notify_admin
-
+from errors import InnerHandledError
 class OrderService:
     @staticmethod
     async def handle_payment_success(session_data, client):
@@ -24,15 +25,6 @@ class OrderService:
                 logger.warning(f'订单{order_id}重复回调')
                 return {'status': 'success', 'message': '订单已处理'}
             raise Exception(f'订单状态异常:{order.status}')
-        
-        #先发卡后处理db事务,防止发送失败但数据库已更新
-        try:
-            user = await client.fetch_user(int(discord_id))
-            embed = create_key_display(product.name, card.card_no)
-            await user.send(embed = embed)
-            logger.info(f'卡密已发送给用户:{user_id}')
-        except Exception as e:
-            logger.error(f'卡密发送失败:{e}')
 
         async with in_transaction() as conn:
             try:
@@ -53,6 +45,18 @@ class OrderService:
                 await order.save(using_db = conn)
             except Exception as e:
                 raise e
+            
+        #先发卡后处理db事务,防止发送失败但数据库已更新
+        try:
+            user = await client.fetch_user(int(discord_id))
+            embed = create_key_display(product.name, card.card_no)
+            await user.send(embed = embed)
+            logger.info(f'卡密已发送给用户:{user_id}')
+        except discord.HTTPException:
+            await OrderService._handle_failure(order, payload_json, f"【严重警告】订单 {order.id} 扣款成功，但发卡失败！请管理员手动将卡密 {card.card_no} 发送给 用户 {user.name}", conn)
+            logger.error(f'【严重警告】订单 {order.id} 扣款成功，但发卡失败！请管理员手动将卡密 {card.card_no} 发送给 用户 {user.name}')
+        except Exception as e:
+            logger.error(f'卡密发送失败:{e}')
     
     @staticmethod
     async def _handle_failure(order, payload_json, reason, conn):
@@ -61,7 +65,7 @@ class OrderService:
         await order.save(using_db = conn)
         #todo 通知管理员
         await notify_admin(title = '❌ 自动发卡失败', content = f'用户{order.discord_id}购买{order.product.name}失败,原因{reason}')
-        raise Exception(reason)
+        raise InnerHandledError()
     
     @staticmethod
     async def get_user_orders(discord_id: int, limit: int = 10) -> List[Order]:

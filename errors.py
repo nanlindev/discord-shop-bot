@@ -18,3 +18,7 @@ class SpamDetectedError(discord.app_commands.AppCommandError):
 class SuspiciousTransactionError(discord.app_commands.AppCommandError):
     def __init__(self, reason: str):
         super().__init__(f"⚠️ 交易被拦截：{reason}")
+
+#标记异常，用于防止双重告警
+class InnerHandledError(Exception):
+    pass

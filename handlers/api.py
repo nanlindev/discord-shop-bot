@@ -7,6 +7,7 @@ from services.order_service import OrderService
 import stripe
 import config
 from utils.notification import notify_admin
+from errors import InnerHandledError
 
 router = APIRouter()
 
@@ -41,7 +42,7 @@ async def stripe_webhook(request: Request):
         logger.info(f"🔔 收到支付成功通知！订单号: {session['id']}")
         try:
             await OrderService.handle_payment_success(session, discord_client)
-            return JSONResponse(status_code = 200, content={"status": "success", "message": "Processed"})
+            return JSONResponse(status_code = 200, content = {"status": "success", "message": "Processed"})
         except Exception as e:
             logger.error(f'订单处理出错{str(e)}')
             #用户私信
@@ -54,10 +55,11 @@ async def stripe_webhook(request: Request):
                 except Exception as notify_err:
                     logger.error(f"❌ 给用户发私信失败: {notify_err}")
             #管理员私信
-            await notify_admin(
-                "💥 Webhook 处理严重错误",
-                f"订单 {session.get('id')} 处理失败。\n错误信息: {str(e)}"
-            )
+            if not isinstance(e, InnerHandledError):
+                await notify_admin(
+                    "💥 Webhook 处理严重错误",
+                    f"订单 {session.metadata.order_no} 处理失败。\n错误信息: {str(e)}"
+                )
             return JSONResponse(
                 status_code = 200, # ⚠️ 注意：这里通常返回 200，告诉 Stripe "我收到消息了，不用再发了"
                 content = {"status": "error", "message": str(e)}
