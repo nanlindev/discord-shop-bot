@@ -1,16 +1,22 @@
 import discord
 from discord import app_commands
 from utils.logger_config import logger
+# 引入 i18n 翻译函数
+from utils.i18n import _
 
-@app_commands.command(name = 'hello', description = '打个招呼')
+@app_commands.command(name='hello', description=_('Say hello to someone'))
 @app_commands.checks.cooldown(1, 2.0)
-async def hello(interaction:discord.Interaction, name:str):
+async def hello(interaction: discord.Interaction, name: str):
     user_name = name or interaction.user.display_name
-    logger.info(f'用户{interaction.user}使用了/hello')
-    await interaction.response.send_message(f'你好,{user_name}!👋')
-    logger.success('hello指令执行完毕')
+    
+    logger.info(f'User {interaction.user} used /hello command')
+    
+    reply_text = _("Hello, {user_name}! 👋").format(user_name=user_name)
+    await interaction.response.send_message(reply_text)
+    
+    logger.success('hello command executed successfully')
 
-def register_slash_commands(tree : app_commands.CommandTree):
+def register_slash_commands(tree: app_commands.CommandTree):
     tree.add_command(hello)
 
-logger.info('✅ 斜杠指令模块(commands.slash)已加载')
+logger.info('✅ Slash command module (commands.slash) loaded')

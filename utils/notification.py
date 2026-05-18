@@ -3,19 +3,21 @@ from discord import Client, User
 from config import ADMIN_ID
 from loguru import logger
 
-async def notify_admin( title: str, content: str):
+async def notify_admin(title: str, content: str):
     try:
         from bot import app
+        # Safely retrieve the Discord client instance from the application state
         client = getattr(app.state, 'discord_client', None)
         if not client:
-            logger.warning('App State中没有找到discord_client,跳过通知')
+            logger.warning('discord_client not found in App State, skipping notification')
             return
         
         user: User = await client.fetch_user(ADMIN_ID)
         if user:
+            # Format the message using Markdown for better readability in Discord DMs
             message = f"### {title}\n\n{content}"
             await user.send(message)
-            logger.info(f"已发送管理员通知: {title}")
+            logger.info(f"Admin notification sent: {title}")
             
     except Exception as e:
-        logger.error(f"发送管理员通知失败: {e}")
+        logger.error(f"Failed to send admin notification: {e}")

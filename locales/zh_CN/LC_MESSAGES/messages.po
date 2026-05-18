@@ -1,0 +1,411 @@
+# Chinese (Simplified, China) translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-05-17 22:22+0800\n"
+"PO-Revision-Date: 2026-05-17 19:40+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hans_CN\n"
+"Language-Team: zh_Hans_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: bot.py:60
+msgid "🚨 Risk Control Interception Alert"
+msgstr "🚨 风控拦截警报"
+
+#: bot.py:61
+msgid "Detected suspicious economic system operation!"
+msgstr "检测到可疑的经济系统操作！"
+
+#: bot.py:64
+msgid "Suspect"
+msgstr "嫌疑人"
+
+#: bot.py:65
+msgid "Server"
+msgstr "服务器"
+
+#: bot.py:66
+msgid "Interception Reason"
+msgstr "拦截原因"
+
+#: bot.py:67
+msgid "Triggered Command"
+msgstr "触发的命令"
+
+#: bot.py:69
+msgid "Time"
+msgstr "时间"
+
+#: bot.py:81
+msgid "❌ An unknown error occurred. The incident has been logged."
+msgstr "❌ 发生未知错误。事件已被记录。"
+
+#: errors.py:8
+msgid "🛑 The shop is currently under maintenance. Please try again later!"
+msgstr "🛑 商店正在维护中。请稍后再试！"
+
+#: errors.py:14
+msgid "🚫 You do not have permission to execute this command!"
+msgstr "🚫 您没有权限执行此命令！"
+
+#: errors.py:20
+#, python-brace-format
+msgid "⚠️ Action too frequent! Please wait {retry_after:.1f} seconds before trying again."
+msgstr "⚠️ 操作过于频繁！请等待 {retry_after:.1f} 秒后再试。"
+
+#: errors.py:26
+#, python-brace-format
+msgid "⚠️ Transaction intercepted: {reason}"
+msgstr "⚠️ 交易被拦截：{reason}"
+
+#: commands/admin.py:12
+msgid "View system core data dashboard"
+msgstr "查看系统核心数据仪表盘"
+
+#: commands/admin.py:19
+msgid "Generate today's order report"
+msgstr "生成今日订单报表"
+
+#: commands/admin.py:34
+msgid "📤 Sending files..."
+msgstr "📤 正在发送文件..."
+
+#: commands/admin.py:37
+msgid "❌ Files have expired or were not found. Please regenerate the report."
+msgstr "❌ 文件已过期或未找到。请重新生成报表。"
+
+#: commands/admin.py:53
+msgid "❌ An error occurred while generating the report. Please check the backend logs."
+msgstr "❌ 生成报表时发生错误。请检查后端日志。"
+
+#: commands/admin.py:55
+msgid "Clear a specified number of messages (Admin only)"
+msgstr "清除指定数量的消息（仅限管理员）"
+
+#: commands/admin.py:56
+msgid "Number of messages to delete (1-100)"
+msgstr "要删除的消息数量 (1-100)"
+
+#: commands/admin.py:60
+msgid "❌ You can only delete up to 100 messages at a time!"
+msgstr "❌ 您一次最多只能删除 100 条消息！"
+
+#: commands/admin.py:63
+#, python-brace-format
+msgid "🧹 Deleting the last {amount} messages..."
+msgstr "🧹 正在删除最近的 {amount} 条消息..."
+
+#: commands/role.py:11
+msgid "🛠️ Role management"
+msgstr "🛠️ 角色管理"
+
+#: commands/role.py:22
+msgid "Batch bind roles"
+msgstr "批量绑定角色"
+
+#: commands/role.py:28 commands/role.py:54
+msgid "❌ No valid users found"
+msgstr "❌ 未找到有效用户"
+
+#: commands/role.py:34 commands/role.py:60
+msgid "❌ System roles are not configured"
+msgstr "❌ 未配置系统角色"
+
+#: commands/role.py:40
+#, python-brace-format
+msgid "👇 Please select the role to bind for {count} user(s):\n{mentions}"
+msgstr "👇 请为 {count} 个用户选择要解绑的角色：\n{mentions}"
+
+#: commands/role.py:48
+msgid "Batch unbind roles"
+msgstr "批量解绑角色"
+
+#: commands/role.py:66
+#, python-brace-format
+msgid "👇 Please select the role to unbind for {count} user(s):\n{mentions}"
+msgstr "👇 请为 {count} 个用户选择要解绑的角色：\n{mentions}"
+
+#: commands/shop.py:16
+msgid "Purchase product (license key)"
+msgstr "购买商品（卡密）"
+
+#: commands/shop.py:31 commands/shop.py:37
+msgid "❌ Product not found"
+msgstr "❌ 未找到商品"
+
+#: commands/shop.py:45
+msgid "❌ You are not logged in. Please use /login first."
+msgstr "❌ 您未登录。请先使用 /login。"
+
+#: commands/shop.py:49
+#, python-brace-format
+msgid "❌ Purchase failed: {error}"
+msgstr "❌ 购买失败：{error}"
+
+#: commands/shop.py:59 commands/shop.py:63
+#, python-brace-format
+msgid "[ID:{id}] {name} ({stock} left)"
+msgstr "[ID:{id}] {name} (剩余 {stock} 件)"
+
+#: commands/slash.py:7
+msgid "Say hello to someone"
+msgstr "向某人打招呼"
+
+#: commands/slash.py:14
+#, python-brace-format
+msgid "Hello, {user_name}! 👋"
+msgstr "你好，{user_name}！👋"
+
+#: commands/user.py:6
+msgid "Register or login to your account"
+msgstr "注册或登录您的账户"
+
+#: commands/user.py:12
+msgid "Check my order status"
+msgstr "查看我的订单状态"
+
+#: components/dashboard_card.py:13
+#, python-brace-format
+msgid "{name}: **{count}**"
+msgstr "{name}：{count} 单"
+
+#: components/dashboard_card.py:18
+msgid "No sales data available"
+msgstr "无销售数据"
+
+#: components/dashboard_card.py:22
+msgid "📊 Real-time Operations Dashboard"
+msgstr "📊 实时运营仪表盘"
+
+#: components/dashboard_card.py:23
+#, python-brace-format
+msgid "Data updated: <t:{timestamp}:R>"
+msgstr "数据更新：<t:{timestamp}:R>"
+
+#: components/dashboard_card.py:29
+msgid "💰 Today's Revenue (USD)"
+msgstr "💰 今日营收（USD）"
+
+#: components/dashboard_card.py:34
+msgid "🛒 Today's Orders"
+msgstr "🛒 今日订单"
+
+#: components/dashboard_card.py:39
+msgid "🟢 Online Users"
+msgstr "🟢 在线用户"
+
+#: components/dashboard_card.py:46
+msgid "🔥 Top Selling Products (Top 5)"
+msgstr "🔥 热销商品 (前5名)"
+
+#: components/key_card.py:17
+msgid "🎉 Purchase Successful! Thank you for your order"
+msgstr "🎉 购买成功！感谢您的惠顾"
+
+#: components/key_card.py:18
+#, python-brace-format
+msgid "You purchased: **{product_name}**\n\nPlease keep your license key safe and do not share it with others."
+msgstr "您购买了：**{product_name}**\n\n请妥善保管您的卡密，切勿泄露给他人。"
+
+#: components/key_card.py:23
+msgid "🔑 Your Exclusive License Key"
+msgstr "🔑 您的专属卡密"
+
+#: components/key_card.py:28
+msgid "If you have any questions, please contact an administrator"
+msgstr "如有任何疑问，请联系管理员"
+
+#: components/order_list_card.py:11
+msgid "📦 My Orders"
+msgstr "📦 我的订单"
+
+#: components/order_list_card.py:12
+msgid "You don't have any order records yet. Go check out the store!"
+msgstr "您还没有任何订单记录。去商店逛逛吧！"
+
+#: components/order_list_card.py:18
+msgid "📦 My Order History"
+msgstr "📦 我的订单记录"
+
+#: components/order_list_card.py:24
+msgid "Unknown Product"
+msgstr "未知商品"
+
+#: components/order_list_card.py:28
+#, python-brace-format
+msgid "🆔 Order No: `{order_no}`"
+msgstr "🆔 订单号：{order_no}"
+
+#: components/order_list_card.py:30
+#, python-brace-format
+msgid "{product_name} - **{amount}** - {time} - {status}"
+msgstr "{product_name} - {amount} - {time} - {status}"
+
+#: components/order_list_card.py:44
+msgid "Showing only the last 10 orders"
+msgstr "仅显示最近 10 笔订单"
+
+#: components/payment_view.py:9
+#, python-brace-format
+msgid "Pay {price} USD"
+msgstr "支付 {price} 美元"
+
+#: components/report_card.py:10
+msgid "💾 Export Full CSV"
+msgstr "💾 导出完整 CSV"
+
+#: components/report_card.py:16
+msgid "📊 Today's Order Report Preview"
+msgstr "📊 今日订单报表预览"
+
+#: components/report_card.py:17
+msgid "Total Revenue"
+msgstr "总营收"
+
+#: components/report_card.py:18
+msgid "Total Orders"
+msgstr "总订单数"
+
+#: components/report_card.py:18
+#, python-brace-format
+msgid "{count} orders"
+msgstr "{count} 单"
+
+#: components/report_card.py:23
+msgid "Unknown User"
+msgstr "未知用户"
+
+#: components/report_card.py:24
+msgid "Deleted Product"
+msgstr "已删除商品"
+
+#: components/report_card.py:25
+#, python-brace-format
+msgid "{emoji} **{username}** - {product} - ¥{amount}\n"
+msgstr "{emoji} {username} - {product} - ¥{amount}"
+
+#: components/report_card.py:33
+msgid "No orders today."
+msgstr "今日无订单。"
+
+#: components/report_card.py:35
+msgid "Latest Orders (Top 5)"
+msgstr "最新订单 (前5名)"
+
+#: components/report_card.py:36
+msgid "Click the button below to export the full Excel/CSV file"
+msgstr "点击下方按钮导出完整的 Excel/CSV 文件"
+
+#: components/role_selector.py:12
+msgid "Please select a role..."
+msgstr "请选择一个角色..."
+
+#: components/role_selector.py:24
+msgid "❌ Role not found"
+msgstr "❌ 未找到角色"
+
+#: components/role_selector.py:36
+msgid "Bind"
+msgstr "绑定"
+
+#: components/role_selector.py:36
+msgid "Unbind"
+msgstr "解绑"
+
+#: components/role_selector.py:37
+#, python-brace-format
+msgid "✅ **Batch {action} completed!**\nSuccessfully processed: {success} users\nFailed/Skipped: {fail} users"
+msgstr "✅ **批量{action}完成！**成功：{success}\n失败/跳过：{fail}"
+
+#: handlers/api.py:53
+#, python-brace-format
+msgid "⚠️ **Automatic delivery failed**\n\nReason: {reason}\n\nPlease contact an administrator for assistance!"
+msgstr "⚠️ **自动发货失败**\n\n原因: {reason}\n\n请联系管理员寻求帮助！"
+
+#: handlers/api.py:61
+msgid "💥 Critical Webhook Processing Error"
+msgstr "💥 严重的 Webhook 处理错误"
+
+#: handlers/api.py:62
+#, python-brace-format
+msgid "Order {order_no} processing failed.\nError message: {error}"
+msgstr "订单 {order_no} 处理失败。\n错误信息：{error}"
+
+#: handlers/messages.py:8
+msgid "Hello, I am your bot"
+msgstr "你好，我是你的机器人"
+
+#: handlers/user_handler.py:23
+msgid "Welcome newcomer! Here are 10 points for you"
+msgstr "欢迎新人！这是给你的 10 个积分"
+
+#: handlers/user_handler.py:26
+msgid "Welcome back! Here is 1 point for you"
+msgstr "欢迎回来！这是给你的 1 个积分"
+
+#: handlers/user_handler.py:60
+#, python-brace-format
+msgid "✅ You selected **{product_name}**, please click the button below to complete the payment:"
+msgstr "✅ 您选择了 **{product_name}**，请点击下方按钮完成支付："
+
+#: handlers/user_handler.py:67
+#, python-brace-format
+msgid "❌ Payment system error: {error}"
+msgstr "❌ 支付系统错误：{error}"
+
+#: models/order.py:65
+msgid "⏳ Pending Payment"
+msgstr "⏳ 待支付"
+
+#: models/order.py:66
+msgid "✅ Paid"
+msgstr "✅ 已支付"
+
+#: models/order.py:67
+msgid "❌ Payment Failed"
+msgstr "❌ 支付失败"
+
+#: models/order.py:68
+msgid "💸 Refunded"
+msgstr "💸 已退款"
+
+#: models/order.py:70
+msgid "❓ Unknown Status"
+msgstr "❓ 未知状态"
+
+#: services/order_service.py:60
+#, python-brace-format
+msgid "【CRITICAL WARNING】Order {order_id} charged successfully, but license key delivery failed! Please manually send key {card_no} to user {username}"
+msgstr "【严重警告】订单 {order_id} 扣款成功，但卡密发货失败！请手动将卡密 {card_no} 发送给用户 {username}"
+
+#: services/order_service.py:76
+msgid "❌ Automatic Key Delivery Failed"
+msgstr "❌ 自动发卡失败"
+
+#: services/order_service.py:77
+#, python-brace-format
+msgid "User {discord_id} failed to purchase {product_name}. Reason: {reason}"
+msgstr "用户 {discord_id} 购买 {product_name} 失败。原因：{reason}"
+
+#~ msgid "You purchased: {product_name"
+#~ msgstr "您购买了：{product_name"
+
+#~ msgid "✅ Batch {action} completed"
+#~ msgstr "✅ 批量{action}完成"
+
+#~ msgid "⚠️ Automatic delivery faile"
+#~ msgstr "⚠️ 自动发货失"
+
+#~ msgid "👇 Please select the role to bind for {count} user(s): {mentions}"
+#~ msgstr "👇 请为 {count} 个用户选择要绑定的角色：{mentions}"
+

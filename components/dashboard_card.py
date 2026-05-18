@@ -1,47 +1,54 @@
 import discord
 from typing import Dict
+from utils.i18n import _
 
 def create_dashboard_display(stats: Dict) -> discord.Embed:
-    revenue = stats.get("total_revenue", 0)      # 今日营收
-    sales   = stats.get("today_sales", 0)          # 今日订单数
-    online  = stats.get("online_users", 0)        # 在线用户数
-    products: Dict[str, int] = stats.get("product_breakdown", {}) # 商品销售明细
+    revenue = stats.get("total_revenue", 0)      
+    sales   = stats.get("today_sales", 0)          
+    online  = stats.get("online_users", 0)        
+    products: Dict[str, int] = stats.get("product_breakdown", {}) 
 
-    top_products = sorted(products.items(), key = lambda x: x[1], reverse = True)
-    product_text = "\n".join([f"{name}: **{count}** 单" for name, count in top_products])
+    top_products = sorted(products.items(), key=lambda x: x[1], reverse=True)
+    
+    product_template = _("{name}: **{count}**")
+    
+    product_text = "\n".join([product_template.format(name=name, count=count) for name, count in top_products])
+    
     if not product_text:
-        product_text = "暂无销量"
+        product_text = _("No sales data available")
 
     embed = discord.Embed(
-        title       = "📊 实时运营看板",
-        description = f"数据更新至: <t:{int(discord.utils.utcnow().timestamp())}:R>", # 显示相对时间
-        color       = discord.Color.green() # 既然是赚钱的数据，用点绿色或者金色
+        # 4. 标题和描述全部换成英文并用 _() 包裹
+        title=_("📊 Real-time Operations Dashboard"),
+        description=_("Data updated: <t:{timestamp}:R>").format(timestamp=int(discord.utils.utcnow().timestamp())), 
+        color=discord.Color.green() 
     )
 
     embed.add_field(
-        name   = "💰 今日营收",
-        value  = f"```css\n{revenue} 元```", # 用 css 代码块高亮数字
-        inline = True
+        # 5. 字段名称换成英文并包裹 _()
+        name=_("💰 Today's Revenue (USD)"),
+        value=f"```css\n{revenue}```",
+        inline=True
     )
     embed.add_field(
-        name   = "🛒 今日订单",
-        value  = f"```css\n{sales} 单```",
-        inline = True
+        name=_("🛒 Today's Orders"),
+        value=f"```css\n{sales}```",
+        inline=True
     )
     embed.add_field(
-        name   = "🟢 在线用户",
-        value  = f"```css\n{online} 人```",
-        inline = True
+        name=_("🟢 Online Users"),
+        value=f"```css\n{online}```",
+        inline=True
     )
 
-    # 5. 添加商品详情 (单独一行)
+    # 6. 商品详情标题换成英文并包裹 _()
     embed.add_field(
-        name   = "🔥 热销商品 (Top 5)",
-        value  = product_text,
-        inline = False # 占满整行
+        name=_("🔥 Top Selling Products (Top 5)"),
+        value=product_text,
+        inline=False 
     )
 
-    # 6. 设置底部信息 (可选)
+    # 7. 底部信息保持英文即可，通常不需要翻译
     embed.set_footer(text="Powered by StatService")
 
     return embed

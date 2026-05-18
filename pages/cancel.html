@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
-    <title>支付已取消</title>
+    <title>Payment Cancelled</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 50px; }
         h1 { color: #f44336; }
@@ -10,7 +10,9 @@
     </style>
 </head>
 <body>
-    <h1>😔 支付已取消</h1>
-    <p>您的订单已取消，如果您有任何问题，欢迎联系我们。</p >
+    <h1>😔 Payment Cancelled</h1>
+    <p>Your order has been cancelled. If you have any questions, feel free to contact us.</p>
+    
+    <a href="{{ discord_invite_url }}" class="btn">Return to Discord Server</a>
 </body>
 </html>

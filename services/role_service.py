@@ -5,8 +5,9 @@ from loguru import logger
 class RoleService:
     @staticmethod
     def parse_members(members_str: str, guild: discord.Guild) -> List[discord.Member]:
-        """解析字符串中的用户ID，返回Member对象列表"""
+        """Parse user IDs from the string and return a list of Member objects"""
         import re
+        # Extract numeric IDs from Discord mention format <@!123456> or <@123456>
         user_ids = re.findall(r'<@!?(\d+)>', members_str)
         members = []
         for user_id in user_ids:
@@ -20,11 +21,11 @@ class RoleService:
         interaction: discord.Interaction, 
         members: List[discord.Member], 
         role: discord.Role, 
-        action: str # "add" or "remove"
+        action: str  # "add" or "remove"
     ) -> Tuple[int, int]:
         """
-        批量添加或移除角色
-        返回: (成功数, 失败数)
+        Batch add or remove roles.
+        Returns: (success_count, fail_count)
         """
         success_count = 0
         fail_count = 0
@@ -42,9 +43,11 @@ class RoleService:
                     success_count += 1
             except discord.Forbidden:
                 fail_count += 1
-                logger.warning(f"权限不足，无法操作 {member.name}")
+                # 1. 日志只改成纯英文，不加 _()，保持服务器日志纯净
+                logger.warning(f"Insufficient permissions to operate on {member.name}")
             except Exception as e:
                 fail_count += 1
-                logger.warning(f"操作 {member.name} 失败: {e}")
+                # 2. 日志只改成纯英文，不加 _()，方便直接复制报错信息去搜索解决方案
+                logger.warning(f"Failed to operate on {member.name}: {e}")
         
         return success_count, fail_count

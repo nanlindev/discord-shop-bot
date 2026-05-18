@@ -1,4 +1,4 @@
-#webhook
+# webhook
 from fastapi import APIRouter, Request, HTTPException, FastAPI, Depends
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
@@ -8,6 +8,7 @@ import stripe
 import config
 from utils.notification import notify_admin
 from errors import InnerHandledError
+from utils.i18n import _
 
 router = APIRouter()
 
@@ -16,10 +17,11 @@ endpoint_secret = config.STRIPE_WEBHOOK_SECRET
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("✅ FastAPI 启动成功，准备接客...")
+    logger.info("✅ FastAPI started successfully, ready to serve requests...")
     yield
-    logger.info("🛑 收到停止信号，正在优雅退出...")
-app = FastAPI(lifespan = lifespan)
+    logger.info("🛑 Received stop signal, shutting down gracefully...")
+
+app = FastAPI(lifespan=lifespan)
 
 @router.post("/webhook")
 async def stripe_webhook(request: Request):
@@ -32,37 +34,40 @@ async def stripe_webhook(request: Request):
             payload, sig_header, endpoint_secret
         )
     except ValueError as e:
-        raise HTTPException(status_code = 400, detail = "Invalid payload")
+        raise HTTPException(status_code=400, detail="Invalid payload")
     except stripe.error.SignatureVerificationError as e:
-        raise HTTPException(status_code = 400, detail = "Invalid signature")
+        raise HTTPException(status_code=400, detail="Invalid signature")
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         discord_user_id = session.metadata.discord_id
-        logger.info(f"🔔 收到支付成功通知！订单号: {session['id']}")
+        logger.info(f"🔔 Payment success notification received! Order ID: {session['id']}")
         try:
             await OrderService.handle_payment_success(session, discord_client)
-            return JSONResponse(status_code = 200, content = {"status": "success", "message": "Processed"})
+            return JSONResponse(status_code=200, content={"status": "success", "message": "Processed"})
         except Exception as e:
-            logger.error(f'订单处理出错{str(e)}')
-            #用户私信
+            logger.error(f'Order processing error: {str(e)}')
+            
             if discord_user_id:
                 try:
-                    user_error_msg = f"⚠️ **自动发货失败**\n\n原因：{str(e)}\n\n请联系管理员处理！"
+                    user_error_msg = _("⚠️ **Automatic delivery failed**\n\nReason: {reason}\n\nPlease contact an administrator for assistance!").format(reason=str(e))
                     user = await discord_client.fetch_user(discord_user_id)
                     await user.send(user_error_msg)
-                    logger.info(f"✅ 已通知用户 {discord_user_id} 支付异常")
+                    logger.info(f"✅ Notified user {discord_user_id} of payment exception")
                 except Exception as notify_err:
-                    logger.error(f"❌ 给用户发私信失败: {notify_err}")
-            #管理员私信
+                    logger.error(f"❌ Failed to send DM to user: {notify_err}")
+            
             if not isinstance(e, InnerHandledError):
-                await notify_admin(
-                    "💥 Webhook 处理严重错误",
-                    f"订单 {session.metadata.order_no} 处理失败。\n错误信息: {str(e)}"
+                admin_title = _("💥 Critical Webhook Processing Error")
+                admin_content = _("Order {order_no} processing failed.\nError message: {error}").format(
+                    order_no=session.metadata.order_no, 
+                    error=str(e)
                 )
+                await notify_admin(admin_title, admin_content)
+                
             return JSONResponse(
-                status_code = 200, # ⚠️ 注意：这里通常返回 200，告诉 Stripe "我收到消息了，不用再发了"
-                content = {"status": "error", "message": str(e)}
+                status_code=200, 
+                content={"status": "error", "message": str(e)}
             )
     # 处理其他事件类型...
-    return JSONResponse(status_code = 200, content = {"status": "ignored"})
+    return JSONResponse(status_code=200, content={"status": "ignored"})

@@ -1,6 +1,8 @@
-#测试回复
+from utils.i18n import _
+
 async def handle_message(message):
     if message.author.bot:
         return
-    if '你好' in message.content:
-        await message.channel.send('你好我是你的机器人')
+    
+    if 'hello' in message.content.lower():
+        await message.channel.send(_("Hello, I am your bot"))

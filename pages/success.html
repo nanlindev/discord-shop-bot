@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
-    <title>支付成功</title>
+    <title>Payment Successful</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 50px; }
         h1 { color: #4CAF50; }
@@ -10,7 +10,9 @@
     </style>
 </head>
 <body>
-    <h1>🎉 支付成功！</h1>
-    <p>感谢您的购买，请加入 Discord 领取您的商品。</p >
+    <h1>🎉 Payment Successful!</h1>
+    <p>Thank you for your purchase! Please join our Discord server to claim your items.</p>
+    
+    <a href="{{ discord_invite_url }}" class="btn">Join Discord & Claim Items</a>
 </body>
 </html>

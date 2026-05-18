@@ -1,24 +1,30 @@
 import discord
-# 定义商城维护错误
+from utils.i18n import _
+
+# Define shop maintenance error
 class ShopMaintenanceError(discord.app_commands.AppCommandError):
     def __init__(self):
-        super().__init__("🛑 系统维护中，请稍后再试！")
+        # User-facing message wrapped in _() for multi-language support
+        super().__init__(_("🛑 The shop is currently under maintenance. Please try again later!"))
 
-# 定义权限不足错误
+# Define insufficient permissions error
 class MissingPermissionsError(discord.app_commands.AppCommandError):
     def __init__(self):
-        super().__init__("🚫 你没有权限执行此命令！")
+        # User-facing message wrapped in _() for multi-language support
+        super().__init__(_("🚫 You do not have permission to execute this command!"))
 
-#冷却时间/刷屏检测
+# Cooldown / Spam detection
 class SpamDetectedError(discord.app_commands.AppCommandError):
     def __init__(self, retry_after: float):
-        super().__init__(f"⚠️ 操作太频繁了！请休息 {retry_after:.1f} 秒后再试。")
+        # User-facing message with dynamic variable, wrapped in _()
+        super().__init__(_("⚠️ Action too frequent! Please wait {retry_after:.1f} seconds before trying again.").format(retry_after=retry_after))
 
-#可疑交易/经济异常
+# Suspicious transaction / Economic anomaly
 class SuspiciousTransactionError(discord.app_commands.AppCommandError):
     def __init__(self, reason: str):
-        super().__init__(f"⚠️ 交易被拦截：{reason}")
+        # User-facing message with dynamic variable, wrapped in _()
+        super().__init__(_("⚠️ Transaction intercepted: {reason}").format(reason=reason))
 
-#标记异常，用于防止双重告警
+# Internal marker exception, used to prevent duplicate alerts in the global error handler
 class InnerHandledError(Exception):
     pass

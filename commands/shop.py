@@ -8,13 +8,15 @@ from handlers.user_handler import UserHandler
 from models.product import Product
 from models.user import User
 from errors import SpamDetectedError
+# 记得引入翻译函数
+from utils.i18n import _ 
 
 user_cooldown_cache = {}
 
-@app_commands.command(name = 'buy', description = '购买商品(卡密)')
+@app_commands.command(name='buy', description=_("Purchase product (license key)"))
 @shop_open()
-async def buy(interaction : discord.Interaction, product_id : str):
-    #3秒防刷
+async def buy(interaction: discord.Interaction, product_id: str):
+    # 3-second anti-spam
     user_id = interaction.user.id
     current_time = time.time()
     cooldown_time = 3.0
@@ -26,37 +28,40 @@ async def buy(interaction : discord.Interaction, product_id : str):
     try:
         pid = int(product_id)
     except ValueError:
-        await interaction.response.send_message("❌ 找不到该商品", ephemeral = True)
+        await interaction.response.send_message(_("❌ Product not found"), ephemeral=True)
         return
-    product = await Product.get_or_none(id = pid, status = 'normal')
+    
+    product = await Product.get_or_none(id=pid, status='normal')
     if not product:
-        # 3. 如果数据库里查不到这个ID，说明用户瞎蒙的或商品不存在
-        await interaction.response.send_message("❌ 找不到该商品", ephemeral = True)
+        # 3. If the ID is not found in the database, the user guessed wrong or the product does not exist
+        await interaction.response.send_message(_("❌ Product not found"), ephemeral=True)
         return
-    await interaction.response.defer(ephemeral = True)
+    
+    await interaction.response.defer(ephemeral=True)
 
     try:
-        user = await User.get_or_none(discord_id = interaction.user.id)
+        user = await User.get_or_none(discord_id=interaction.user.id)
         if not user:
-            await interaction.followup.send('❌ 检测到您尚未登录,请先试用/login登录')
+            await interaction.followup.send(_('❌ You are not logged in. Please use /login first.'))
             return
         await UserHandler.handle_buy(interaction, user, product)
     except Exception as e:
-        await interaction.followup.send(f'❌ 购买失败:{str(e)}')
+        await interaction.followup.send(_('❌ Purchase failed: {error}').format(error=str(e)))
 
 @buy.autocomplete('product_id')
-async def product_id_auticomplete(i : discord.Interaction, current : str) -> List[app_commands.Choice[str]]:
+async def product_id_autocomplete(i: discord.Interaction, current: str) -> List[app_commands.Choice[str]]:
     if not config.SHOP_STATUS:
         return []
 
     if not current:
-        products = await Product.filter(status = 'normal').order_by('-id').limit(25)
-        choices = [app_commands.Choice(name = p.name, value = str(p.id)) for p in products]
+        products = await Product.filter(status='normal', stock__gt=0).order_by('-id').limit(25)
+        # 自动补全选项里的文案也要走翻译
+        choices = [app_commands.Choice(name=_('[ID:{id}] {name} ({stock} left)').format(id=p.id, name=p.name, stock=p.stock), value=str(p.id)) for p in products]
     else:
-        all_matched_products = await Product.filter(status = 'normal', name__icontains = current)
-        sorted_products = sorted(all_matched_products, key = lambda p : (not p.name.lower().startswith(current.lower()), p.id))
-        choices = [app_commands.Choice(name = p.name, value = str(p.id)) for p in sorted_products[:25]]
+        all_matched_products = await Product.filter(status='normal', name__icontains=current, stock__gt=0)
+        sorted_products = sorted(all_matched_products, key=lambda p: (not p.name.lower().startswith(current.lower()), p.id))
+        choices = [app_commands.Choice(name=_('[ID:{id}] {name} ({stock} left)').format(id=p.id, name=p.name, stock=p.stock), value=str(p.id)) for p in sorted_products[:25]]
     return choices
 
-def register_shop_commands(tree : app_commands.CommandTree):
+def register_shop_commands(tree: app_commands.CommandTree):
     tree.add_command(buy)
