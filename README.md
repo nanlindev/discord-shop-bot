@@ -2,6 +2,8 @@
 
 A Discord bot designed to manage shop functionalities, user roles, and payments via Stripe. This bot allows server administrators to manage user tiers and handle payment processing directly through Discord.
 
+github link: https://github.com/nanlindev/discord-shop-bot
+
 ---
 
 ## 🚀 Features

@@ -45,6 +45,7 @@ async def global_setting_init():
 # Global error handler for slash commands
 @client.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError):
+    user_locale = str(interaction.locale).replace('-', '_')
     if isinstance(error, errors.ShopMaintenanceError):
         await interaction.response.send_message(str(error), ephemeral=True)
     elif isinstance(error, errors.MissingPermissionsError):
@@ -57,16 +58,16 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
         admin_user = client.get_user(config.ADMIN_ID)
         if admin_user:
             embed = discord.Embed(
-                title=_("🚨 Risk Control Interception Alert"), 
-                description=_("Detected suspicious economic system operation!"), 
+                title=_("🚨 Risk Control Interception Alert", user_locale), 
+                description=_("Detected suspicious economic system operation!", user_locale), 
                 color=discord.Color.red()
             )
-            embed.add_field(name=_("Suspect"), value=f"{interaction.user.mention} (`{interaction.user.id}`)")
-            embed.add_field(name=_("Server"), value=interaction.guild.name if interaction.guild else "DM")
-            embed.add_field(name=_("Interception Reason"), value=str(error))
-            embed.add_field(name=_("Triggered Command"), value=f"`/{interaction.command.name}`")
+            embed.add_field(name=_("Suspect", user_locale), value=f"{interaction.user.mention} (`{interaction.user.id}`)")
+            embed.add_field(name=_("Server", user_locale), value=interaction.guild.name if interaction.guild else "DM")
+            embed.add_field(name=_("Interception Reason", user_locale), value=str(error))
+            embed.add_field(name=_("Triggered Command", user_locale), value=f"`/{interaction.command.name}`")
             embed.set_thumbnail(url=interaction.user.avatar.url)
-            embed.set_footer(text=f"{_('Time')}: {discord.utils.format_dt(discord.utils.utcnow(), style='R')}")
+            embed.set_footer(text=f"{_('Time', user_locale)}: {discord.utils.format_dt(discord.utils.utcnow(), style='R')}")
             try:
                 await admin_user.send(embed=embed)
             except:
@@ -75,10 +76,11 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
         logger.error(
             f"🚨 Unknown Error | User: {interaction.user} ({interaction.user.id}) | "
             f"Server: {interaction.guild.name if interaction.guild else 'DM'} | "
-            f"Command: /{interaction.command.name}",
+            f"Command: /{interaction.command.name} | "
+            f"Reason: {str(error)}",
             exc_info=True
         )
-        await interaction.response.send_message(_("❌ An unknown error occurred. The incident has been logged."), ephemeral=True)
+        await interaction.response.send_message(_("❌ An unknown error occurred. The incident has been logged.", user_locale), ephemeral=True)
 
 app.include_router(api_router)
 

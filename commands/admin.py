@@ -56,11 +56,12 @@ async def report(interaction: discord.Interaction):
 @app_commands.describe(amount=_('Number of messages to delete (1-100)'))
 @is_owner()
 async def clear_chat(interaction: discord.Interaction, amount: int = 0):
+    current_lang = str(interaction.locale).replace('-', '_')
     if amount > 100:
-        await interaction.response.send_message(_("❌ You can only delete up to 100 messages at a time!"), ephemeral=True)
+        await interaction.response.send_message(_("❌ You can only delete up to 100 messages at a time!", current_lang), ephemeral=True)
         return
 
-    await interaction.response.send_message(_("🧹 Deleting the last {amount} messages...").format(amount=amount), ephemeral=True)
+    await interaction.response.send_message(_("🧹 Deleting the last {amount} messages...", current_lang).format(amount=amount), ephemeral=True)
 
     messages = [message async for message in interaction.channel.history(limit=amount)]
     try:

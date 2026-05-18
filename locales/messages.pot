@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-17 22:22+0800\n"
+"POT-Creation-Date: 2026-05-18 17:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,11 +99,11 @@ msgstr ""
 msgid "Number of messages to delete (1-100)"
 msgstr ""
 
-#: commands/admin.py:60
+#: commands/admin.py:61
 msgid "❌ You can only delete up to 100 messages at a time!"
 msgstr ""
 
-#: commands/admin.py:63
+#: commands/admin.py:64
 #, python-brace-format
 msgid "🧹 Deleting the last {amount} messages..."
 msgstr ""

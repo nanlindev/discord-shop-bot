@@ -4,7 +4,8 @@ import os
 import discord
 from discord.app_commands import Translator, TranslationContext, locale_str
 from config import DEFAULT_LANGUAGE
-
+from loguru import logger
+from typing import Optional
 
 local_ctx = threading.local()
 
@@ -12,16 +13,13 @@ def set_language(lang: str):
     """在 on_interaction 中调用，设置当前线程语言"""
     local_ctx.lang = lang
 
-def _(text: str) -> str:
-    lang = getattr(local_ctx, 'lang', DEFAULT_LANGUAGE)
-    
+def _(text: str, current_lang: str = "") -> str:
+    lang = current_lang or getattr(local_ctx, 'lang', DEFAULT_LANGUAGE)
     locale_file = lang.replace('-', '_')
-    
     try:
         t = gettext.translation('messages', localedir='locales', languages=[locale_file])
     except FileNotFoundError:
         t = gettext.translation('messages', localedir='locales', languages=[DEFAULT_LANGUAGE], fallback=True)
-    
     return t.gettext(text)
 
 

@@ -96,11 +96,11 @@ msgstr "清除指定数量的消息（仅限管理员）"
 msgid "Number of messages to delete (1-100)"
 msgstr "要删除的消息数量 (1-100)"
 
-#: commands/admin.py:60
+#: commands/admin.py:61
 msgid "❌ You can only delete up to 100 messages at a time!"
 msgstr "❌ 您一次最多只能删除 100 条消息！"
 
-#: commands/admin.py:63
+#: commands/admin.py:64
 #, python-brace-format
 msgid "🧹 Deleting the last {amount} messages..."
 msgstr "🧹 正在删除最近的 {amount} 条消息..."
