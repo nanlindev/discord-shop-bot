@@ -33,4 +33,3 @@ db.sqlite3-*
 Thumbs.db
 
 .env
-config.py
