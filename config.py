@@ -55,7 +55,7 @@ DEFAULT_LANGUAGE = 'en-US' # Default language code
 
 # Administrator Configuration
 # TODO: Replace with your actual Discord User ID for testing/management
-ADMIN_ID = None #Example: 123456789012345678
+ADMIN_ID = 1501929962599350362
 
 # Role Mapping
 # Maps internal role names to Discord Role IDs.
