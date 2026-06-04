@@ -1,0 +1,26 @@
+#python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+#venv
+venv
+env
+.venv
+
+#git
+.git
+.gitignore
+
+#IDE config
+.vscode
+.idea
+
+#environment
+.env
+.env.local
+
+#log
+*.log
