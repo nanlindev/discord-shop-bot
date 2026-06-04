@@ -56,7 +56,7 @@ jobs:
             # 【修改点 2】明确拉取 :latest 标签
             # 这会拉取你在上一步构建并推送的那个“最新”镜像
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            
+             
             # 2. 停止并移除旧容器
             docker stop discord-bot || true
             docker rm discord-bot || true
