@@ -60,7 +60,7 @@ jobs:
             # 2. 停止并移除旧容器
             docker stop discord-bot || true
             docker rm discord-bot || true
-             
+            
             # 3. 启动新容器
             # 【修改点 3】运行 :latest 标签的镜像
             docker run -d \
