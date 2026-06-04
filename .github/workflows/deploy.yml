@@ -2,11 +2,11 @@ name: Build and Deploy Discord Bot
 
 on:
   push:
-    branches: [ "main" ] # 当推送到 main 分支时触发
+    branches: [ "main" ]
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }} # 例如: username/repo-name
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push:
@@ -24,21 +24,20 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # 内置 token，无需额外 secret
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
+      # 【修改点 1】不再使用 metadata-action，而是直接在 build 步骤指定 tags
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          # 这里明确指定两个标签：
+          # 1. latest: 用于部署时拉取“最新”版本
+          # 2. sha: 用于备份，防止 latest 出错时可以回滚到具体某次提交
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     needs: build-and-push
@@ -54,21 +53,21 @@ jobs:
             # 1. 登录 GHCR
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             
-            # 2. 拉取最新镜像
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+            # 【修改点 2】明确拉取 :latest 标签
+            # 这会拉取你在上一步构建并推送的那个“最新”镜像
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             
-            # 3. 停止并移除旧容器 (假设容器名为 discord-bot)
+            # 2. 停止并移除旧容器
             docker stop discord-bot || true
             docker rm discord-bot || true
             
-            # 4. 启动新容器
-            # 注意：这里需要通过 --env-file 或 -e 传递敏感信息
-            # 建议先在服务器上创建一个 .env 文件，或者直接在下面写 -e 参数
+            # 3. 启动新容器
+            # 【修改点 3】运行 :latest 标签的镜像
             docker run -d \
               --name discord-bot \
               --restart unless-stopped \
               --env-file /home/deploy/project/discord-bot/.env \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             
-            # 5. 清理未使用的镜像 (可选，节省空间)
+            # 4. 清理未使用的镜像
             docker image prune -f
