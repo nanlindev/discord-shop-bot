@@ -67,6 +67,8 @@ jobs:
               --name discord-bot \
               --restart unless-stopped \
               --env-file /home/deploy/project/discord-bot/.env \
+              -v /home/deploy/project/data/db.sqlite3:/app/db.sqlite3 \
+              -v /home/deploy/project/data/logs:/app/logs \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             
             # 4. 清理未使用的镜像
