@@ -70,6 +70,6 @@ jobs:
               -v /home/deploy/projects/discord-bot/data/db.sqlite3:/app/db.sqlite3 \
               -v /home/deploy/projects/discord-bot/logs:/app/logs \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            
+             
             # 4. 清理未使用的镜像
             docker image prune -f
